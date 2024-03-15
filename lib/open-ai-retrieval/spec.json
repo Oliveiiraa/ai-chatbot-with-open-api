@@ -1,0 +1,110 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Get available properties data",
+    "description": "Retrieves available properties on real estate",
+    "version": "v1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3333"
+    }
+  ],
+  "paths": {
+    "/properties": {
+      "get": {
+        "description": "Get available properties on real estate and current datetime to help schedule visits. Call only one time per chat.",
+        "operationId": "GetAvailableProperties",
+        "parameters": []
+      }
+    },
+    "/user/appointments": {
+      "get": {
+        "description": "Get appointments of user from email",
+        "operationId": "GetUserAppointments",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "description": "Email of the user to retrieve appointments for",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/properties/appointments/available-slots": {
+      "get": {
+        "description": "Get available time slots for a property on a specific date. propertyId must be UUID of property.",
+        "operationId": "GetAvailablePropertySlots",
+        "parameters": [
+          {
+            "name": "propertyId",
+            "in": "query",
+            "description": "The UUID of the property for which to retrieve available slots. This should come from the property array of the specific property item.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "description": "The date to retrieve available slots for in iSO format",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/properties/appointments": {
+      "post": {
+        "description": "Create an appointment to visit a property",
+        "operationId": "CreateAppointment",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string"
+                  },
+                  "propertyId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "email",
+                  "propertyId",
+                  "date"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Appointment created"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {}
+  }
+}
